@@ -1,4 +1,7 @@
 Logger
 ======
 
-A kind of Logger
+A kind of Logger for practice
+
+
+
