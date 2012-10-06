@@ -31,12 +31,15 @@ public class LogManager {
 	public LoggerContext getLoggerContext(String name) {
 		AtomicReference<WeakReference<LoggerContext>> ref = contexts.get(name);
 		if(ref == null){
-			LoggerContext context = new LoggerContext(name);
-			WeakReference<LoggerContext> wr = new WeakReference<LoggerContext>(context);
+			LoggerContext ctx = new LoggerContext(name);
+			WeakReference<LoggerContext> wr = new WeakReference<LoggerContext>(ctx);
 			AtomicReference<WeakReference<LoggerContext>> r = new AtomicReference<WeakReference<LoggerContext>>(wr);
 			contexts.putIfAbsent(name, r);
-			return contexts.get(name).get().get();
+			ref = contexts.get(name);
 		}
-		return contexts.get(name).get().get();
+		LoggerContext context = ref.get().get();
+		context.start();
+		return context;
 	}
+	
 }
