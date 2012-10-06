@@ -14,9 +14,7 @@ public class DefaultConfigurationTest {
 		// LogLevel
 		LogLevel level = config.getLevel();
 		assertThat(level, is(LogLevel.DEBUG));
-		
 		// Appender
-		
 	}
 
 }
