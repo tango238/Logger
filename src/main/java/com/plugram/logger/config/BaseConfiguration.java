@@ -5,12 +5,20 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import com.plugram.logger.LoggerConfig;
 import com.plugram.logger.appender.Appender;
 
 public class BaseConfiguration implements Configuration {
 
-	private ConcurrentMap<String, Appender> appenders = new ConcurrentHashMap<String, Appender>();
+	protected ConcurrentMap<String, Appender> appenders = new ConcurrentHashMap<String, Appender>();
+
+	protected ConcurrentMap<String, LoggerConfig> loggerConfigs = new ConcurrentHashMap<String, LoggerConfig>();
 	
+	@Override
+	public LoggerConfig getLoggerConfig(String name) {
+		return loggerConfigs.get(name);
+	}
+
 	/** 
 	 * Adds appenders to the configuration.
 	 * 
@@ -37,9 +45,8 @@ public class BaseConfiguration implements Configuration {
 
 	@Override
 	public void start() {
-		// TODO 設定ファイルの読み書きとか
 	}
-
+	
 	@Override
 	public void stop() {
 		// TODO Auto-generated method stub
