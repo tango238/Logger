@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.plugram.logger.config.BaseConfiguration;
 import com.plugram.logger.config.Configuration;
 import com.plugram.logger.config.DefaultConfiguration;
+import com.plugram.logger.config.MyConfiguration;
 
 public class LoggerContext {
 
@@ -35,7 +36,25 @@ public class LoggerContext {
 	}
 
 	public Logger getLogger(String name) {
-		return loggers.get(name);
+		Logger logger = loggers.get(name);
+		if(logger != null){
+			return logger;
+		}
+		logger = createLogger(name);
+		Logger prev = loggers.putIfAbsent(name, logger);
+		return prev == null ? logger : prev;
+	}
+	
+	/**
+	 * Returns the configuration.
+	 * @return
+	 */
+	public Configuration getConfig() {
+		return config;
+	}
+
+	protected Logger createLogger(String name) {
+		return new Logger(name, this);
 	}
 
 	public void start() {
@@ -43,7 +62,7 @@ public class LoggerContext {
 			try {
 				if (status == Status.INITIALIZED) {
 					// TODO 設定ファイルから読み込む
-					loadConofiguration();
+					loadConfiguration();
 					status = Status.STARTED;
 				}
 			} finally {
@@ -52,8 +71,10 @@ public class LoggerContext {
 		}
 	}
 
-	private synchronized void loadConofiguration() {
-		DefaultConfiguration config = new DefaultConfiguration();
+	private synchronized void loadConfiguration() {
+		// TODO we should surely dispose the previous configuration.
+		// this.config.dispose();
+		Configuration config = new MyConfiguration();
 		config.start();
 		this.config = config;
 	}
