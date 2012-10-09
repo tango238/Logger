@@ -17,17 +17,28 @@ public class Logger {
 	public String getName() {
 		return loggerConfig.getName();
 	}
-
+	
+	private boolean isLogLevelEnabled(LogLevel level) {
+		return loggerConfig.getLevel().compareTo(level) >= 0;		
+	}
+	
 	public boolean isTraceEnabled() {
 		return isLogLevelEnabled(LogLevel.TRACE);
 	}
 
 	public boolean isDebugEnabled() {
-		
 		return isLogLevelEnabled(LogLevel.DEBUG);
 	}
 
-	private boolean isLogLevelEnabled(LogLevel level) {
-		return loggerConfig.getLevel().compareTo(level) >= 0;		
+	public Boolean isWarnEnabled() {
+		return isLogLevelEnabled(LogLevel.WARN);
+	}
+
+	public Boolean isErrorEnabled() {
+		return isLogLevelEnabled(LogLevel.ERROR);
+	}
+
+	public Boolean isFatalEnabled() {
+		return isLogLevelEnabled(LogLevel.FATAL);
 	}
 }
