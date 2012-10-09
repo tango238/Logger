@@ -7,11 +7,11 @@ import org.junit.Test;
 
 import com.plugram.logger.appender.ConsoleAppender;
 
-public class BaseConfigurationTest {
+public class AbstractConfigurationTest {
 
 	@Test
 	public void testAppenders() {
-		BaseConfiguration config = new BaseConfiguration();
+		Configuration config = new DefaultConfiguration();
 		config.addAppender("A1", new ConsoleAppender());
 		config.addAppender("A2", new ConsoleAppender());
 		assertThat(config.getAppenders().size(), is(2));

@@ -8,11 +8,12 @@ import java.util.concurrent.ConcurrentMap;
 import com.plugram.logger.LoggerConfig;
 import com.plugram.logger.appender.Appender;
 
-public class BaseConfiguration implements Configuration {
+public abstract class AbstractConfiguration implements Configuration {
 
 	protected ConcurrentMap<String, Appender> appenders = new ConcurrentHashMap<String, Appender>();
 
 	protected ConcurrentMap<String, LoggerConfig> loggerConfigs = new ConcurrentHashMap<String, LoggerConfig>();
+	
 	
 	@Override
 	public LoggerConfig getLoggerConfig(String name) {
@@ -32,24 +33,21 @@ public class BaseConfiguration implements Configuration {
 	/**
 	 * Returns appenders.
 	 * 
-	 * @return Map&lt;String, Appender&gt; appenders
+	 * @return 
 	 */
 	public Map<String, Appender> getAppenders() {
 		return Collections.unmodifiableMap(appenders);
 	}
 
 	@Override
-	public LogLevel getLevel() {
-		return LogLevel.ERROR;
-	}
-
-	@Override
 	public void start() {
+		
 	}
 	
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
+		loggerConfigs.clear();
+		appenders.clear();
 	}
 
 }

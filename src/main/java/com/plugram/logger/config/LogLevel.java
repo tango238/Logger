@@ -9,12 +9,10 @@ public enum LogLevel {
 	private LogLevel(int value) {
 		this.value = value;
 	}
-	
-	public boolean isLowerEquals(LogLevel level) {
-		return this.value <= level.value;
+
+	public int getIntLevel() {
+		return value;
 	}
+
 	
-	public boolean isHigherThan(LogLevel level) {
-		return this.value > level.value;
-	}
 }
