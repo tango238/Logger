@@ -12,6 +12,8 @@ public class LoggerContextTest {
 		LoggerContext context = LogManager.getManager().getLoggerContext();
 		Logger logger = context.getLogger(Main.class.getName());
 		assertThat(logger, is(notNullValue()));
+		
+		// TODO assertThat(logger.getName(), is(Main.class.getName()));
 	}
 	
 }
