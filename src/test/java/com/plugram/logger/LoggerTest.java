@@ -8,11 +8,12 @@ import org.junit.Test;
 import com.plugram.logger.config.DebugConfiguration;
 import com.plugram.logger.config.ErrorConfiguration;
 import com.plugram.logger.config.FatalConfiguration;
+import com.plugram.logger.config.InfoConfiguration;
 import com.plugram.logger.config.TraceConfiguration;
 import com.plugram.logger.config.WarnConfiguration;
 
-public class LoggerTest {
-
+public class LoggerTest {	
+	
 	@Test
 	public void testTrace() {
 		LoggerContext context = LogManager.getManager().getLoggerContext();
@@ -22,11 +23,13 @@ public class LoggerTest {
 		// trace
 		assertThat(logger.isTraceEnabled(), is(true));
 		assertThat(logger.isDebugEnabled(), is(true));
+		assertThat(logger.isInfoEnabled(), is(true));
 		assertThat(logger.isWarnEnabled(), is(true));
 		assertThat(logger.isErrorEnabled(), is(true));
 		assertThat(logger.isFatalEnabled(), is(true));
 		logger.trace("trace message.");
 		logger.debug("debug message.");
+		logger.trace("info message.");
 		logger.warn("warn message.");
 		logger.error("error message.");
 		logger.fatal("fatal message.");
@@ -41,6 +44,22 @@ public class LoggerTest {
 		// debug
 		assertThat(logger.isTraceEnabled(), is(false));
 		assertThat(logger.isDebugEnabled(), is(true));
+		assertThat(logger.isInfoEnabled(), is(true));
+		assertThat(logger.isWarnEnabled(), is(true));
+		assertThat(logger.isErrorEnabled(), is(true));
+		assertThat(logger.isFatalEnabled(), is(true));
+	}
+	
+	@Test
+	public void testInfo() throws Exception {
+		LoggerContext context = LogManager.getManager().getLoggerContext();
+		context.reconfigure(new InfoConfiguration());
+		Logger logger = context.getLogger(Main.class);
+
+		// warn
+		assertThat(logger.isTraceEnabled(), is(false));
+		assertThat(logger.isDebugEnabled(), is(false));
+		assertThat(logger.isInfoEnabled(), is(true));
 		assertThat(logger.isWarnEnabled(), is(true));
 		assertThat(logger.isErrorEnabled(), is(true));
 		assertThat(logger.isFatalEnabled(), is(true));
@@ -55,6 +74,7 @@ public class LoggerTest {
 		// warn
 		assertThat(logger.isTraceEnabled(), is(false));
 		assertThat(logger.isDebugEnabled(), is(false));
+		assertThat(logger.isInfoEnabled(), is(false));
 		assertThat(logger.isWarnEnabled(), is(true));
 		assertThat(logger.isErrorEnabled(), is(true));
 		assertThat(logger.isFatalEnabled(), is(true));
@@ -69,6 +89,7 @@ public class LoggerTest {
 		// error
 		assertThat(logger.isTraceEnabled(), is(false));
 		assertThat(logger.isDebugEnabled(), is(false));
+		assertThat(logger.isInfoEnabled(), is(false));
 		assertThat(logger.isWarnEnabled(), is(false));
 		assertThat(logger.isErrorEnabled(), is(true));
 		assertThat(logger.isFatalEnabled(), is(true));

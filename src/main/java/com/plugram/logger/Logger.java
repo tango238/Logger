@@ -15,7 +15,11 @@ public class Logger {
 	 * @return
 	 */
 	public String getName() {
-		return loggerConfig.getName();
+		String name = loggerConfig.getName();
+		if(name == null) {
+			System.out.println("[INFO] Returns RootLogger.");
+		}
+		return name;
 	}
 	
 	private boolean isLogLevelEnabled(LogLevel level) {
@@ -28,6 +32,10 @@ public class Logger {
 
 	public boolean isDebugEnabled() {
 		return isLogLevelEnabled(LogLevel.DEBUG);
+	}
+
+	public boolean isInfoEnabled() {
+		return isLogLevelEnabled(LogLevel.INFO);
 	}
 
 	public Boolean isWarnEnabled() {
@@ -52,6 +60,11 @@ public class Logger {
 			loggerConfig.log(msg);
 	}
 	
+	public void info(String msg) {
+		if(isInfoEnabled()) 
+			loggerConfig.log(msg);
+	}
+	
 	public void warn(String msg) {
 		if(isWarnEnabled()) 
 			loggerConfig.log(msg);
@@ -66,4 +79,5 @@ public class Logger {
 		if(isFatalEnabled()) 
 			loggerConfig.log(msg);
 	}
+
 }
