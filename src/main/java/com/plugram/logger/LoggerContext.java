@@ -1,5 +1,6 @@
 package com.plugram.logger;
 
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -39,11 +40,13 @@ public class LoggerContext {
 	}
 	
 	public Logger getLogger(String name) {
-		LoggerConfig loggerConfig = config.getLoggerConfig(name);
-		if(loggerConfig == null){
-			return root.getLogger();
+		Set<String> keys = config.getLoggerConfigs().keySet();
+		for(String key : keys) {
+			if(name.contains(key)){
+				return config.getLoggerConfig(key).getLogger();
+			}
 		}
-		return loggerConfig.getLogger();
+		return root.getLogger();
 	}
 	
 	/**

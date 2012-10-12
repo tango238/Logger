@@ -14,6 +14,7 @@ public class BaseLogLevelConfiguration extends AbstractConfiguration {
 	public void start() {
 		addLoggerConfig("com.plugram.logger.Main", level, new ConsoleAppender());
 		addLoggerConfig("com.plugram.logger.LoggerTest", level, new ConsoleAppender());
+		addLoggerConfig("com.plugram.logger.aaa", level, new ConsoleAppender());
 	}
 
 }

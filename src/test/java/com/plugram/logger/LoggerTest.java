@@ -13,6 +13,17 @@ import com.plugram.logger.config.TraceConfiguration;
 import com.plugram.logger.config.WarnConfiguration;
 
 public class LoggerTest {
+	
+	@Test
+	public void testFilterByName() throws Exception {
+		LoggerContext context = LogManager.getManager().getLoggerContext();
+		context.reconfigure(new TraceConfiguration());
+		Logger logger = context.getLogger("com.plugram.logger.aaa.Hoge");
+		assertThat(logger.isTraceEnabled(), is(true));
+
+		Logger logger2 = context.getLogger("com.plugram.logger.bbb.Foo");
+		assertThat(logger2.isTraceEnabled(), is(false));
+	}
 
 	@Test
 	public void testName() throws Exception {
@@ -21,7 +32,6 @@ public class LoggerTest {
 		Logger logger = context.getLogger(LoggerTest.class);
 		assertThat(logger.getName(), is(LoggerTest.class.getName()));
 	}
-	
 	
 	@Test
 	public void testTrace() {

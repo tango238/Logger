@@ -1,10 +1,13 @@
 package com.plugram.logger;
 
+import com.plugram.logger.config.TraceConfiguration;
+
 public class Main {
 
-	static Logger logger = LogManager.getManager().getLoggerContext().getLogger(Main.class);
-	
 	public static void main(String[] args){
+		LoggerContext context = LogManager.getManager().getLoggerContext();
+		context.reconfigure(new TraceConfiguration());
+		Logger logger = context.getLogger(Main.class);
 		System.out.println(logger.getName());
 	}
 }
