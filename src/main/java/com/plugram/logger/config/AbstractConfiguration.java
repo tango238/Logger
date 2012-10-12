@@ -20,6 +20,22 @@ public abstract class AbstractConfiguration implements Configuration {
 		return loggerConfigs.get(name);
 	}
 
+	@Override
+	public void addLoggerConfig(String name, LogLevel level, Appender appender) {
+		LoggerConfig loggerConfig = new LoggerConfig(name, level, appender);
+		addLoggerConfig(loggerConfig);
+	}
+
+	@Override
+	public void addLoggerConfig(LoggerConfig loggerConfig) {
+		loggerConfigs.putIfAbsent(loggerConfig.getName(), loggerConfig);
+	}
+
+	@Override
+	public Map<String, LoggerConfig> getLoggerConfigs() {
+		return Collections.unmodifiableMap(loggerConfigs);
+	}
+	
 	/** 
 	 * Adds appenders to the configuration.
 	 * 
@@ -38,6 +54,7 @@ public abstract class AbstractConfiguration implements Configuration {
 	public Map<String, Appender> getAppenders() {
 		return Collections.unmodifiableMap(appenders);
 	}
+	
 
 	@Override
 	public void start() {

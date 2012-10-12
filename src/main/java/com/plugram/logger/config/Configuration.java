@@ -13,6 +13,12 @@ public interface Configuration {
 	
 	public LoggerConfig getLoggerConfig(String name);
 	
+	public void addLoggerConfig(String name, LogLevel level, Appender appender);
+	
+	public void addLoggerConfig(LoggerConfig loggerConfig);
+	
+	public Map<String, LoggerConfig> getLoggerConfigs();
+	
 	public void addAppender(String name, Appender appender);
 
 	public Map<String, Appender> getAppenders();

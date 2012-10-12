@@ -39,8 +39,6 @@ public class LoggerContext {
 	}
 	
 	public Logger getLogger(String name) {
-		// TODO The order of instantiation. 
-		// [Configuration -> LoggerConfig -> Logger]
 		LoggerConfig loggerConfig = config.getLoggerConfig(name);
 		if(loggerConfig == null){
 			return root.getLogger();

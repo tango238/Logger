@@ -12,7 +12,16 @@ import com.plugram.logger.config.InfoConfiguration;
 import com.plugram.logger.config.TraceConfiguration;
 import com.plugram.logger.config.WarnConfiguration;
 
-public class LoggerTest {	
+public class LoggerTest {
+
+	@Test
+	public void testName() throws Exception {
+		LoggerContext context = LogManager.getManager().getLoggerContext();
+		context.reconfigure(new TraceConfiguration());
+		Logger logger = context.getLogger(LoggerTest.class);
+		assertThat(logger.getName(), is(LoggerTest.class.getName()));
+	}
+	
 	
 	@Test
 	public void testTrace() {
