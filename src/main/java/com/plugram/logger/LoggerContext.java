@@ -1,28 +1,27 @@
 package com.plugram.logger;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.plugram.logger.config.BaseConfiguration;
 import com.plugram.logger.config.Configuration;
 import com.plugram.logger.config.DefaultConfiguration;
-import com.plugram.logger.config.MyConfiguration;
+import com.plugram.logger.exception.LoggerNotRunningException;
 
 public class LoggerContext {
 
 	/** The context name */
 	private final String name;
 
-	private Configuration config = new BaseConfiguration();
+	private LoggerConfig root = new RootLoggerConfig();
+	
+	private Configuration config = new DefaultConfiguration();
 
 	private Lock lock = new ReentrantLock();
 	
-	private ConcurrentMap<String, Logger> loggers = new ConcurrentHashMap<String, Logger>();
+//	private ConcurrentMap<String, Logger> loggers = new ConcurrentHashMap<String, Logger>();
 	
 	public enum Status {
-		INITIALIZED, STARTED, STOPPING, STOPPED
+		INITIALIZED, RUNNING, STOPPING, STOPPED
 	}
 
 	private volatile Status status = Status.INITIALIZED;
@@ -35,14 +34,18 @@ public class LoggerContext {
 		this.name = name;
 	}
 
+	public Logger getLogger(Class<?> clazz){
+		return getLogger(clazz.getName());
+	}
+	
 	public Logger getLogger(String name) {
-		Logger logger = loggers.get(name);
-		if(logger != null){
-			return logger;
+		// TODO The order of instantiation. 
+		// [Configuration -> LoggerConfig -> Logger]
+		LoggerConfig loggerConfig = config.getLoggerConfig(name);
+		if(loggerConfig == null){
+			return root.getLogger();
 		}
-		logger = createLogger(name);
-		Logger prev = loggers.putIfAbsent(name, logger);
-		return prev == null ? logger : prev;
+		return loggerConfig.getLogger();
 	}
 	
 	/**
@@ -53,17 +56,13 @@ public class LoggerContext {
 		return config;
 	}
 
-	protected Logger createLogger(String name) {
-		return new Logger(name, this);
-	}
-
 	public void start() {
 		if (lock.tryLock()) {
 			try {
 				if (status == Status.INITIALIZED) {
 					// TODO 設定ファイルから読み込む
 					loadConfiguration();
-					status = Status.STARTED;
+					status = Status.RUNNING;
 				}
 			} finally {
 				lock.unlock();
@@ -74,7 +73,7 @@ public class LoggerContext {
 	private synchronized void loadConfiguration() {
 		// TODO we should surely dispose the previous configuration.
 		// this.config.dispose();
-		Configuration config = new MyConfiguration();
+		Configuration config = new DefaultConfiguration();
 		config.start();
 		this.config = config;
 	}
@@ -92,7 +91,26 @@ public class LoggerContext {
 	}
 
 	private synchronized void destroyConfiguration() {
+		System.out.println("destroyConfiguration.");
 		config.stop();
+	}
+
+	/**
+	 * Reloads the configuration.
+	 * @param traceConfiguration
+	 */
+	public void reconfigure(Configuration configuration) {
+		lock.lock();
+		if(status != Status.RUNNING){
+			throw new LoggerNotRunningException();
+		}
+		try {
+			configuration.stop();
+			configuration.start();
+			this.config = configuration;
+		} finally {
+			lock.unlock();
+		}
 	}
 
 }
