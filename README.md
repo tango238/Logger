@@ -71,10 +71,10 @@ public class Main {
 	static Logger logger = loggerContext.getLogger(Main.class);
 	
 	public static void main(String[] args){
-		logger.trace("Trace message");
-		logger.debug("Debug message");
-		logger.info("Info message");
-		logger.warn("Warn message");
+		logger.trace("Trace message"); // Do not display
+		logger.debug("Debug message"); // Do not display
+		logger.info("Info message");  // Do not display
+		logger.warn("Warn message");  // Do not display
 		logger.error("Error message");
 		logger.fatal("Fatal message");
 	}
