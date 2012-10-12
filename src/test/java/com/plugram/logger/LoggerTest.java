@@ -1,5 +1,6 @@
 package com.plugram.logger;
 
+import static com.plugram.logger.ConfigCommands.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
@@ -14,15 +15,16 @@ import com.plugram.logger.config.LogLevel;
 import com.plugram.logger.config.TraceConfiguration;
 import com.plugram.logger.config.WarnConfiguration;
 
-import static com.plugram.logger.ConfigCommands.*;
-
 public class LoggerTest {
+	
 	
 	@Test
 	public void testLogger() throws Exception {
 		LoggerContext context = new LoggerFactory(){{
 			addLoggerConfig("hoge.aaa.bbb", LogLevel.DEBUG, new ConsoleAppender());
 			addLoggerConfig("hoge.bbb.ccc", LogLevel.WARN, new ConsoleAppender());
+			addLoggerConfig("aaa.bbb.ccc", LogLevel.INFO, new ConsoleAppender());
+			addLoggerConfig("aaa.bbb.ccc.Main", LogLevel.WARN, new ConsoleAppender());
 		}}.getLoggerContext();
 		
 		Logger logger1 = context.getLogger("hoge.aaa.bbb.Foo");
@@ -50,10 +52,27 @@ public class LoggerTest {
 
 	@Test
 	public void testName() throws Exception {
-		LoggerContext context = LogManager.getManager().getLoggerContext();
-		context.reconfigure(new TraceConfiguration());
+		LoggerContext context = new LoggerFactory(){{
+			addLoggerConfig("com.plugram.logger.Main", LogLevel.TRACE, new ConsoleAppender());
+			addLoggerConfig("com.plugram.logger.LoggerTest", LogLevel.TRACE, new ConsoleAppender());
+			addLoggerConfig("com.plugram.logger.aaa.Main", LogLevel.ERROR, new ConsoleAppender());
+			addLoggerConfig("com.plugram.logger.aaa", LogLevel.TRACE, new ConsoleAppender());
+		}}.getLoggerContext();
+		
 		Logger logger = context.getLogger(LoggerTest.class);
 		assertThat(logger.getName(), is(LoggerTest.class.getName()));
+	}
+	
+	@Test
+	public void testName2() throws Exception {
+		LoggerContext context = new LoggerFactory(){{
+			addLoggerConfig("com.plugram.logger", LogLevel.WARN, new ConsoleAppender());
+			addLoggerConfig("com.plugram.logger.Main", LogLevel.ERROR, new ConsoleAppender());
+		}}.getLoggerContext();
+		
+		Logger logger = context.getLogger("com.plugram.logger.Main");
+		assertThat(logger.isWarnEnabled(), is(false));
+		assertThat(logger.isErrorEnabled(), is(true));
 	}
 	
 	@Test

@@ -41,10 +41,18 @@ public class LoggerContext {
 	
 	public Logger getLogger(String name) {
 		Set<String> keys = config.getLoggerConfigs().keySet();
+		String tmp = "";
 		for(String key : keys) {
-			if(name.contains(key)){
+			if(name.equals(key)){
 				return config.getLoggerConfig(key).getLogger();
+			}else if(name.contains(key)){
+				if(key.length() > tmp.length()){
+					tmp = key;
+				}
 			}
+		}
+		if(tmp.length() > 0){
+			return config.getLoggerConfig(tmp).getLogger();
 		}
 		return root.getLogger();
 	}

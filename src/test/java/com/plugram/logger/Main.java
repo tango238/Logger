@@ -12,7 +12,7 @@ public class Main {
 		addLoggerConfig("hoge.bbb.ccc", LogLevel.WARN, new ConsoleAppender());
 		addLoggerConfig("hoge.bbb.ccc", LogLevel.WARN, new ConsoleAppender());
 		addLoggerConfig("com.plugram.logger", LogLevel.WARN, new ConsoleAppender());
-		// TODO bug: addLoggerConfig("com.plugram.logger.Main", LogLevel.ERROR, new ConsoleAppender());
+		addLoggerConfig("com.plugram.logger.Main", LogLevel.ERROR, new ConsoleAppender());
 	}}.getLoggerContext();
 	
 	static Logger logger = loggerContext.getLogger(Main.class);
