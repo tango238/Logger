@@ -5,14 +5,37 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.plugram.logger.appender.ConsoleAppender;
 import com.plugram.logger.config.DebugConfiguration;
 import com.plugram.logger.config.ErrorConfiguration;
 import com.plugram.logger.config.FatalConfiguration;
 import com.plugram.logger.config.InfoConfiguration;
+import com.plugram.logger.config.LogLevel;
 import com.plugram.logger.config.TraceConfiguration;
 import com.plugram.logger.config.WarnConfiguration;
 
+import static com.plugram.logger.ConfigCommands.*;
+
 public class LoggerTest {
+	
+	@Test
+	public void testLogger() throws Exception {
+		LoggerContext context = new LoggerFactory(){{
+			addLoggerConfig("hoge.aaa.bbb", LogLevel.DEBUG, new ConsoleAppender());
+			addLoggerConfig("hoge.bbb.ccc", LogLevel.WARN, new ConsoleAppender());
+		}}.getLoggerContext();
+		
+		Logger logger1 = context.getLogger("hoge.aaa.bbb.Foo");
+		assertThat(logger1.isDebugEnabled(), is(true));
+		
+		Logger logger2 = context.getLogger("hoge.bbb.ccc.Bar");
+		assertThat(logger2.isDebugEnabled(), is(false));
+		
+		// RootLogger: LogLevel.ERROR
+		Logger logger3 = context.getLogger("xxx.xxx.Bar");
+		assertThat(logger3.isDebugEnabled(), is(false));
+		assertThat(logger3.isErrorEnabled(), is(true));
+	}
 	
 	@Test
 	public void testFilterByName() throws Exception {
