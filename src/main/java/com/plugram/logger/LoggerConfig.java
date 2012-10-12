@@ -1,5 +1,6 @@
 package com.plugram.logger;
 
+import com.plugram.logger.appender.Appender;
 import com.plugram.logger.config.LogLevel;
 
 public class LoggerConfig {
@@ -10,10 +11,13 @@ public class LoggerConfig {
 	
 	private final LogLevel level;
 	
-	public LoggerConfig(String name, LogLevel level) {
+	private final Appender appender;
+	
+	public LoggerConfig(String name, LogLevel level, Appender appender) {
 		this.name = name;
 		this.logger = newInstance();
 		this.level = level;
+		this.appender = appender;
 	}
 
 	private Logger newInstance() {
@@ -30,6 +34,10 @@ public class LoggerConfig {
 
 	public String getName() {
 		return name;
+	}
+
+	public void log(String msg) {
+		appender.write(msg.getBytes());
 	}
 
 }
