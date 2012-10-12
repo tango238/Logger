@@ -19,8 +19,17 @@ public class LoggerTest {
 		context.reconfigure(new TraceConfiguration());
 		Logger logger = context.getLogger(Main.class);
 		
-		// TODO trace
+		// trace
 		assertThat(logger.isTraceEnabled(), is(true));
+		assertThat(logger.isDebugEnabled(), is(true));
+		assertThat(logger.isWarnEnabled(), is(true));
+		assertThat(logger.isErrorEnabled(), is(true));
+		assertThat(logger.isFatalEnabled(), is(true));
+		logger.trace("trace message.");
+		logger.debug("debug message.");
+		logger.warn("warn message.");
+		logger.error("error message.");
+		logger.fatal("fatal message.");
 	}
 	
 	@Test
@@ -29,8 +38,12 @@ public class LoggerTest {
 		context.reconfigure(new DebugConfiguration());
 		Logger logger = context.getLogger(Main.class);
 
-		// TODO debug
+		// debug
+		assertThat(logger.isTraceEnabled(), is(false));
 		assertThat(logger.isDebugEnabled(), is(true));
+		assertThat(logger.isWarnEnabled(), is(true));
+		assertThat(logger.isErrorEnabled(), is(true));
+		assertThat(logger.isFatalEnabled(), is(true));
 	}
 	
 	@Test
@@ -39,8 +52,12 @@ public class LoggerTest {
 		context.reconfigure(new WarnConfiguration());
 		Logger logger = context.getLogger(Main.class);
 
-		// TODO warn
+		// warn
+		assertThat(logger.isTraceEnabled(), is(false));
+		assertThat(logger.isDebugEnabled(), is(false));
 		assertThat(logger.isWarnEnabled(), is(true));
+		assertThat(logger.isErrorEnabled(), is(true));
+		assertThat(logger.isFatalEnabled(), is(true));
 	}
 	
 	@Test
@@ -49,8 +66,12 @@ public class LoggerTest {
 		context.reconfigure(new ErrorConfiguration());		
 		Logger logger = context.getLogger(Main.class);
 
-		// TODO error
+		// error
+		assertThat(logger.isTraceEnabled(), is(false));
+		assertThat(logger.isDebugEnabled(), is(false));
+		assertThat(logger.isWarnEnabled(), is(false));
 		assertThat(logger.isErrorEnabled(), is(true));
+		assertThat(logger.isFatalEnabled(), is(true));
 	}
 	
 	@Test
@@ -59,7 +80,11 @@ public class LoggerTest {
 		context.reconfigure(new FatalConfiguration());
 		Logger logger = context.getLogger(Main.class);
 
-		// TODO fatal
+		// fatal
+		assertThat(logger.isTraceEnabled(), is(false));
+		assertThat(logger.isDebugEnabled(), is(false));
+		assertThat(logger.isWarnEnabled(), is(false));
+		assertThat(logger.isErrorEnabled(), is(false));
 		assertThat(logger.isFatalEnabled(), is(true));
 	}
 }

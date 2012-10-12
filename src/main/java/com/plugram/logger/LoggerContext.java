@@ -100,10 +100,10 @@ public class LoggerContext {
 	 * @param traceConfiguration
 	 */
 	public void reconfigure(Configuration configuration) {
+		lock.lock();
 		if(status != Status.RUNNING){
 			throw new LoggerNotRunningException();
 		}
-		lock.lock();
 		try {
 			configuration.stop();
 			configuration.start();

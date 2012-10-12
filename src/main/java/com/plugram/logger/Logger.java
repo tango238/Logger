@@ -19,7 +19,7 @@ public class Logger {
 	}
 	
 	private boolean isLogLevelEnabled(LogLevel level) {
-		return loggerConfig.getLevel().compareTo(level) >= 0;		
+		return loggerConfig.getLevel().compareTo(level) <= 0;		
 	}
 	
 	public boolean isTraceEnabled() {
@@ -40,5 +40,30 @@ public class Logger {
 
 	public Boolean isFatalEnabled() {
 		return isLogLevelEnabled(LogLevel.FATAL);
+	}
+	
+	public void trace(String msg) {
+		if(isTraceEnabled()) 
+			loggerConfig.log(msg);
+	}
+	
+	public void debug(String msg) {
+		if(isDebugEnabled()) 
+			loggerConfig.log(msg);
+	}
+	
+	public void warn(String msg) {
+		if(isWarnEnabled()) 
+			loggerConfig.log(msg);
+	}
+	
+	public void error(String msg) {
+		if(isErrorEnabled()) 
+			loggerConfig.log(msg);
+	}
+	
+	public void fatal(String msg) {
+		if(isFatalEnabled()) 
+			loggerConfig.log(msg);
 	}
 }
